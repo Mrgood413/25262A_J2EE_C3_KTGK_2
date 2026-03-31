@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{_layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>List products</title>
+</head>
+<body>
+<div layout:fragment="content" class="container body-content">
+    <a th:if="${isAdmin}" th:href="@{/products/create}" class="btn btn-primary mb-3">Create New Product</a>
+
+    <div class="mb-3 d-flex gap-3 align-items-center">
+        <form th:action="@{/products}" method="get" class="d-flex gap-2">
+            <input type="text" name="keyword" class="form-control"
+                   th:value="${keyword}" placeholder="Search by name">
+            <button type="submit" class="btn btn-outline-primary">Search</button>
+        </form>
+
+        <form th:action="@{/products}" method="get" class="d-flex gap-2">
+            <select name="categoryId" class="form-select">
+                <option value="" th:selected="${selectedCategoryId == null}">All categories</option>
+                <option th:each="c : ${categories}"
+                        th:value="${c.id}"
+                        th:text="${c.name}"
+                        th:selected="${selectedCategoryId != null and selectedCategoryId == c.id}">
+                </option>
+            </select>
+            <button type="submit" class="btn btn-outline-secondary">Filter</button>
+        </form>
+
+        <div class="ms-auto">
+            <a th:href="@{/products/sort(direction='asc')}" class="btn btn-outline-secondary btn-sm">Price ↑</a>
+            <a th:href="@{/products/sort(direction='desc')}" class="btn btn-outline-secondary btn-sm">Price ↓</a>
+        </div>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Price</th>
+            <th scope="col">Image</th>
+            <th scope="col">Category Name</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="product : ${listproduct}">
+            <th scope="row" th:text="${product.id}"></th>
+            <td th:text="${product.name}"></td>
+            <td th:text="${product.price}"></td>
+            <td>
+                <img height="120" width="150"
+                     th:src="@{'/images/' + ${product.image}}"
+                     alt="Product image">
+            </td>
+            <td th:text="${product.category.name}"></td>
+            <td>
+                <form th:if="${!isAdmin}"
+                      th:action="@{/products/add-to-cart}"
+                      method="post"
+                      class="d-inline-flex gap-2">
+                    <input type="hidden" name="productId" th:value="${product.id}">
+                    <input type="number" name="quantity" value="1" min="1"
+                           class="form-control form-control-sm" style="width: 80px;">
+                    <button type="submit" class="btn btn-success btn-sm">Add to Cart</button>
+                </form>
+                <a th:if="${isAdmin}" th:href="@{/products/edit/{id}(id=${product.id})}" class="btn btn-secondary btn-sm ms-1">Edit</a>
+                <a th:if="${isAdmin}" th:href="@{/products/delete/{id}(id=${product.id})}" class="btn btn-danger btn-sm ms-1">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <nav th:if="${productPage != null}">
+        <ul class="pagination">
+            <li class="page-item" th:classappend="${productPage.first} ? 'disabled'">
+                <a class="page-link" th:href="@{/products(page=${currentPage - 1})}">Previous</a>
+            </li>
+            <li class="page-item" th:classappend="${productPage.last} ? 'disabled'">
+                <a class="page-link" th:href="@{/products(page=${currentPage + 1})}">Next</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+</body>
+</html>
+

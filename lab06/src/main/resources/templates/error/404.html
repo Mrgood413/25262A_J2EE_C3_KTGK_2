@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{_layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Not found</title>
+</head>
+<body>
+<div layout:fragment="content" class="container">
+    <h3>404 - Product not found</h3>
+    <a th:href="@{/products}" class="btn btn-primary">Back to products</a>
+</div>
+</body>
+</html>
+

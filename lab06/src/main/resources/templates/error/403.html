@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{_layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Access denied</title>
+</head>
+<body>
+<div layout:fragment="content" class="container">
+    <h3>403 - Không có quyền truy cập</h3>
+    <p>Bạn không có quyền để thực hiện chức năng của Admin.</p>
+    <div class="d-flex gap-2 mt-3">
+        <a th:href="@{/products}" class="btn btn-primary">Về trang sản phẩm</a>
+        <a th:href="@{/login}" class="btn btn-secondary">Đăng nhập lại</a>
+    </div>
+</div>
+</body>
+</html>
+
